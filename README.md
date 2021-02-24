@@ -1,3 +1,7 @@
+This is a modified implementation from the original, which can be found [here](https://github.com/zoogzog/chexnet).
+In here we add several different models to try and train on the Chex14 Database for pulmonary diseases.
+
+
 # CheXNet implementation in PyTorch
 
 Yet another PyTorch implementation of the [CheXNet](https://arxiv.org/abs/1711.05225) algorithm for pathology detection in 
