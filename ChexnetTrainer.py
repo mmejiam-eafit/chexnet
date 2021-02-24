@@ -19,6 +19,8 @@ from sklearn.metrics.ranking import roc_auc_score
 from DensenetModels import DenseNet121
 from DensenetModels import DenseNet169
 from DensenetModels import DenseNet201
+from ConradDenseASPP import ConradDenseAspp
+from XceptionModel import XCeption
 from DatasetGenerator import DatasetGenerator
 
 
@@ -44,10 +46,18 @@ class ChexnetTrainer ():
 
         
         #-------------------- SETTINGS: NETWORK ARCHITECTURE
-        if nnArchitecture == 'DENSE-NET-121': model = DenseNet121(nnClassCount, nnIsTrained).cuda()
-        elif nnArchitecture == 'DENSE-NET-169': model = DenseNet169(nnClassCount, nnIsTrained).cuda()
-        elif nnArchitecture == 'DENSE-NET-201': model = DenseNet201(nnClassCount, nnIsTrained).cuda()
-        
+        if nnArchitecture == 'DENSE-NET-121':
+            model = DenseNet121(nnClassCount, nnIsTrained).cuda()
+        elif nnArchitecture == 'DENSE-NET-169':
+            model = DenseNet169(nnClassCount, nnIsTrained).cuda()
+        elif nnArchitecture == 'DENSE-NET-201':
+            model = DenseNet201(nnClassCount, nnIsTrained).cuda()
+        elif nnArchitecture == 'CONRAD-DENSE-ASPP':
+            model = ConradDenseAspp(num_classes=nnClassCount, include_top=nnIsTrained)
+        elif nnArchitecture == 'XCEPTION':
+            model = XCeption(classCount=nnClassCount).cuda()
+
+
         model = torch.nn.DataParallel(model).cuda()
                 
         #-------------------- SETTINGS: DATA TRANSFORMS
@@ -115,7 +125,7 @@ class ChexnetTrainer ():
         
         for batchID, (input, target) in enumerate (dataLoader):
                         
-            target = target.cuda(async = True)
+            target = target.cuda()
                  
             varInput = torch.autograd.Variable(input)
             varTarget = torch.autograd.Variable(target)         
@@ -140,7 +150,7 @@ class ChexnetTrainer ():
         
         for i, (input, target) in enumerate (dataLoader):
             
-            target = target.cuda(async=True)
+            target = target.cuda()
                  
             varInput = torch.autograd.Variable(input, volatile=True)
             varTarget = torch.autograd.Variable(target, volatile=True)    
